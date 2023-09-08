@@ -2,13 +2,13 @@
 
 ## 基本功能
 
-[X] 基本框架
-[X] 可切换的环境配置
-[X] 基于 SQLAlchemy 的 ORM
-[X] Swagger 接口文档支持
-[X] 基于 logure 框架的日志记录
-[X] JWT 鉴权
-[X] RUFF 代码规范
+- [x] 基本框架
+- [x] 可切换的环境配置
+- [x] 基于 SQLAlchemy 的 ORM
+- [x] Swagger 接口文档支持
+- [x] 基于 logure 框架的日志记录
+- [x] JWT 鉴权
+- [x] RUFF 代码规范
 
 ## 启动开发
 
