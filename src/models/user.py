@@ -28,3 +28,8 @@ class DBUser(Base):
     def update(cls, data: "DBUser", **kwargs):
         db.query(cls).filter(cls.username == data.username).update(dict(**kwargs))
         db.commit()
+
+    @classmethod
+    def delete(cls, data: "DBUser"):
+        db.query(cls).filter(cls.username == data.username).delete()
+        db.commit()

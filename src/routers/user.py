@@ -16,10 +16,12 @@ from src.utils.auth import (
     verify_password,
 )
 
+ROUTER_TAG = "User"
+
 router = APIRouter()
 
 
-@router.post("/register", tags=["User"], summary="用户注册")
+@router.post("/register", tags=[ROUTER_TAG], summary="用户注册")
 async def register(data: UserCreate):
     if data.access_key != config.SUPER_ACCESS_KEY:
         return Ret.fail("权限不足")
@@ -40,7 +42,7 @@ async def register(data: UserCreate):
         return Ret.fail("注册失败")
 
 
-@router.post("/login", tags=["User"], summary="用户登录")
+@router.post("/login", tags=[ROUTER_TAG], summary="用户登录")
 async def login(data: UserLogin):
     user = DBUser.get_by_username(data.username)
     logger.info(f"用户 {user.username if user else '未知'} 正在登录...")
@@ -60,7 +62,7 @@ async def login(data: UserLogin):
     )
 
 
-@router.post("/edit", tags=["User"], summary="用户更新")
+@router.post("/edit", tags=[ROUTER_TAG], summary="用户更新")
 async def edit(data: UserUpdate):
     if data.access_key != config.SUPER_ACCESS_KEY:
         return Ret.fail("权限不足")
@@ -73,7 +75,7 @@ async def edit(data: UserUpdate):
     return Ret.fail("用户不存在")
 
 
-@router.get("/me", tags=["User"], summary="用户个人信息")
+@router.get("/me", tags=[ROUTER_TAG], summary="用户个人信息")
 async def info(current_user: DBUser = Depends(get_current_active_user)):
     logger.info(f"用户 {current_user} 正在查询个人信息...")
     return Ret.success(
@@ -82,6 +84,8 @@ async def info(current_user: DBUser = Depends(get_current_active_user)):
             "username": current_user.username,
             "userId": current_user.id,
             "perm_level": current_user.perm_level,
-            "perm_role": get_perm_role(current_user.perm_level), # type: ignore
+            "perm_role": get_perm_role(current_user.perm_level),  # type: ignore
         },
     )
+
+logger.success(f"注册 {ROUTER_TAG} 路由表完成")

@@ -6,6 +6,9 @@ from fastapi.security import OAuth2PasswordRequestForm
 from src.conf import APP_ENV, config
 from src.log import get_logging_config, logger
 from src.models import database_init
+from src.routers.test import router as test_router
+
+# from src.routers.template import router as template_router
 from src.routers.user import login
 from src.routers.user import router as user_router
 from src.schemas.message import UserToken
@@ -20,28 +23,33 @@ app = FastAPI(
     docs_url="/",
 )
 
-origins = ["*"]
-
+""" 跨域中间件配置 """
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-@app.get("/")
+
+""" TODO 挂载路由表 """
+app.include_router(user_router, prefix="/user", tags=["User"])
+# app.include_router(template_router, prefix="/_table_name_", tags=["_table_name_"])
+app.include_router(test_router, prefix="/test", tags=["test"])
+... # 请根据需要追加填写
+
+
+@app.get("/ping")
 async def root():
     return {"message": "Miraixy FastAPI Quickstart Running..."}
 
 
 @app.post("/token", response_model=UserToken)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    return await login(UserLogin(username=form_data.username, password=form_data.password))
-
-
-# 挂载用户管理路由
-app.include_router(user_router, prefix="/user", tags=["User"])
+    return await login(
+        UserLogin(username=form_data.username, password=form_data.password),
+    )
 
 
 def start():

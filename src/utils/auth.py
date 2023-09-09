@@ -5,6 +5,7 @@ from jose import jwt
 from passlib.context import CryptContext
 
 from src.conf import config
+from src.schemas.perm import Role
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 24 * 60  # 1 day
 REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * config.ACCESS_TOKEN_EXPIRE_DAYS
@@ -60,8 +61,8 @@ def create_refresh_token(
 def get_perm_role(perm_level: int) -> str:
     """获取权限角色"""
 
-    if perm_level < 10:
+    if perm_level < Role.Admin:
         return "User"
-    if perm_level < 20:
+    if perm_level < Role.Super:
         return "Admin"
     return "Super"

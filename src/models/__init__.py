@@ -1,8 +1,12 @@
 from src.log import logger
 from src.utils.db import Base, engine
 
-# 引入所有的表模型以便统一创建
+# TODO 引入所有需要自动创建的表模型
+# from .template import DB_TableName_  # noqa: F401
+from .test import DBTest  # noqa: F401
 from .user import DBUser  # noqa: F401
+
+...
 
 
 def database_init():

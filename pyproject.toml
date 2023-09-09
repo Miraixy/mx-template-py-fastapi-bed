@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "一套基于 FastAPI 集成了 SqlAlchemy ORM、JWT 鉴权、环境配置、日志记录等基本功能的后端 API 开发模板"
 authors = ["KroMiose <li_xiangff@163.com>"]
 readme = "README.md"
-packages = [{include = "src"}]
+packages = [{ include = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -12,13 +12,14 @@ fastapi = "^0.103.1"
 loguru = "^0.7.0"
 ujson = "^5.8.0"
 uvicorn = "^0.23.2"
-python-jose = {extras = ["cryptography"], version = "^3.3.0"}
-passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-jose = { extras = ["cryptography"], version = "^3.3.0" }
+passlib = { extras = ["bcrypt"], version = "^1.7.4" }
 python-multipart = "^0.0.6"
 sqlalchemy = "^2.0.20"
 
 [tool.poetry.scripts]
 app = "src.app:start"
+create_crud = "tools.create_crud:main"
 
 
 [build-system]
@@ -28,41 +29,42 @@ build-backend = "poetry.core.masonry.api"
 [tool.ruff]
 extend-exclude = []
 ignore = [
-    "E501",
-    "E722",
-    "B008",
-    "B905",
-    "TID252",
-    "TRY002",
-    "TRY003",
-    "RUF001",
-    "RUF002",
-    "RUF003",
-    "RUF006",
-    "RUF100",
-    "PGH003",
+  "E501",
+  "E722",
+  "B008",
+  "B905",
+  "TID252",
+  "TRY002",
+  "TRY003",
+  "RUF001",
+  "RUF002",
+  "RUF003",
+  "RUF006",
+  "RUF100",
+  "PGH003",
+  "N801",
+  "A003",
 ]
 select = [
-    "F",
-    "E",
-    "I",
-    "N",
-    "B",
-    "A",
-    "COM",
-    "C4",
-    "ISC",
-    "PIE",
-    "PYI",
-    "Q",
-    "RSE",
-    "RET",
-    "SLF",
-    "SIM",
-    "TID",
-    "ARG",
-    "PTH",
-    "PGH",
-    "TRY",
-    "RUF",
+  "F",
+  "E",
+  "I",
+  "B",
+  "A",
+  "COM",
+  "C4",
+  "ISC",
+  "PIE",
+  "PYI",
+  "Q",
+  "RSE",
+  "RET",
+  "SLF",
+  "SIM",
+  "TID",
+  "ARG",
+  "PTH",
+  "PGH",
+  "TRY",
+  "RUF",
 ]

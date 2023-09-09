@@ -9,6 +9,7 @@
 - [x] 基于 logure 框架的日志记录
 - [x] JWT 鉴权
 - [x] RUFF 代码规范
+- [x] 一行命令生成包括 model, schema, router 的 CRUD 模板
 
 ## 启动开发
 
@@ -35,4 +36,31 @@ poetry run app
 ```bash
 poetry run app env=dev  # 开发环境 (default)
 poetry run app env=prod # 生产环境
+```
+
+## 生成 CRUD 模板
+
+### 1. 执行以下命令
+
+```bash
+poetry run create_crud name={数据模型名}  # 多词使用 `_` 作为分隔 大小写不敏感
+```
+
+### 2. 添加数据表自动创建
+
+在 `src/models/__init__.py` 的 `引入所有需要自动创建的表模型` 引入你的关联模型:
+
+```python
+# TODO 引入所有需要自动创建的表模型
+from .{数据模型名} import DB{数据模型类名}  # 数据模型类名为数据模型名的大驼峰形式 例如: UserData
+```
+
+### 3. 挂载路由
+
+在 `src/app.py` 中的 `挂载路由表` 添加路由:
+
+```python
+from src.routers.{数据模型名} import router as {数据模型名}_router
+
+app.include_router({数据模型名}, prefix="/{路由前缀}", tags=["{路由标签}"])
 ```

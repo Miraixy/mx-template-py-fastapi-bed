@@ -1,3 +1,6 @@
+from typing import Literal
+
+
 class Config:
     """配置类"""
 
@@ -6,8 +9,8 @@ class Config:
 
     HOST: str = "0.0.0.0"
     PORT: int = 8090
-    LOG_LEVEL: str = "INFO"
-    UVICORN_LOG_LEVEL: str = "WARNING"
+    LOG_LEVEL: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
+    UVICORN_LOG_LEVEL: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "WARNING"
     DATABASE_URL: str = "sqlite:///./test.sqlite3.db"
     JWT_SECRET_KEY: str = "secret:Miraixy-TEMPLATE"
     JWT_REFRESH_SECRET_KEY: str = "refresh:Miraixy-TEMPLATE"
