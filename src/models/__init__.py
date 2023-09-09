@@ -3,7 +3,6 @@ from src.utils.db import Base, engine
 
 # TODO 引入所有需要自动创建的表模型
 # from .template import DB_TableName_  # noqa: F401
-from .test import DBTest  # noqa: F401
 from .user import DBUser  # noqa: F401
 
 ...
