@@ -1,1 +1,1 @@
-poetry run python
+poetry run app

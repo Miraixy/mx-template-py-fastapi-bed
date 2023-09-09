@@ -1,16 +1,15 @@
-from datetime import datetime
-
 import uvicorn
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 
 from src.conf import APP_ENV, config
 from src.log import get_logging_config, logger
 from src.models import database_init
-from src.models.user import DBUser
+from src.routers.user import login
 from src.routers.user import router as user_router
 from src.schemas.message import UserToken
-from src.utils.auth import create_access_token, create_refresh_token, verify_password
+from src.schemas.user import UserLogin
 
 database_init()
 
@@ -21,6 +20,15 @@ app = FastAPI(
     docs_url="/",
 )
 
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def root():
@@ -29,20 +37,7 @@ async def root():
 
 @app.post("/token", response_model=UserToken)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    logger.info(f"用户 {form_data.username} 正在登录...")
-    user = DBUser.get_by_username(form_data.username)
-    if user and verify_password(form_data.password, user.password):  # type: ignore
-        DBUser.update(user, login_time=datetime.now())
-        return UserToken(
-            access_token=create_access_token(user.username),
-            refresh_token=create_refresh_token(user.username),
-            token_type="bearer",
-        )
-    raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Incorrect username or password",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
+    return await login(UserLogin(username=form_data.username, password=form_data.password))
 
 
 # 挂载用户管理路由

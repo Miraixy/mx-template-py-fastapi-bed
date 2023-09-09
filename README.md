@@ -33,6 +33,6 @@ poetry run app
 ### 4. 切换环境
 
 ```bash
-poetry run app env=dev  # 开发环境(default)
+poetry run app env=dev  # 开发环境 (default)
 poetry run app env=prod # 生产环境
 ```

@@ -6,8 +6,8 @@ from passlib.context import CryptContext
 
 from src.conf import config
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes
-REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
+ACCESS_TOKEN_EXPIRE_MINUTES = 24 * 60  # 1 day
+REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * config.ACCESS_TOKEN_EXPIRE_DAYS
 ALGORITHM = "HS256"
 JWT_SECRET_KEY = config.JWT_SECRET_KEY
 JWT_REFRESH_SECRET_KEY = config.JWT_REFRESH_SECRET_KEY
@@ -55,3 +55,13 @@ def create_refresh_token(
 
     to_encode = {"exp": expires_delta, "sub": str(subject)}
     return jwt.encode(to_encode, JWT_REFRESH_SECRET_KEY, ALGORITHM)
+
+
+def get_perm_role(perm_level: int) -> str:
+    """获取权限角色"""
+
+    if perm_level < 10:
+        return "User"
+    if perm_level < 20:
+        return "Admin"
+    return "Super"

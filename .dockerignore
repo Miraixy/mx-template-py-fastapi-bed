@@ -4,3 +4,4 @@
 **/*.pyd
 **/.mypy_cache
 **/.pytest_cache
+tests

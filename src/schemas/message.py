@@ -25,12 +25,14 @@ class Ret(BaseModel):
 
 
 class UserToken(BaseModel):
+    code: int
     access_token: str
     refresh_token: str
     token_type: str
 
     def __init__(self, access_token: str, refresh_token: str, token_type: str):
         super().__init__(
+            code=200,
             access_token=access_token,
             refresh_token=refresh_token,
             token_type=token_type,
