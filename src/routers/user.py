@@ -54,7 +54,7 @@ async def login(data: UserLogin):
             refresh_token=create_refresh_token(user.username),
             token_type="bearer",
         )
-    logger.info(f"用户 {user} 登录失败... ")
+    logger.info(f"用户 {data.username} 登录失败... ")
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Incorrect username or password",
@@ -77,7 +77,7 @@ async def edit(data: UserUpdate):
 
 @router.get("/me", tags=[ROUTER_TAG], summary="用户个人信息")
 async def info(current_user: DBUser = Depends(get_current_active_user)):
-    logger.info(f"用户 {current_user} 正在查询个人信息...")
+    logger.info(f"用户 {current_user.username} 正在查询个人信息...")
     return Ret.success(
         "query success",
         data={

@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List
 
 from pydantic import BaseModel
 
@@ -12,11 +13,16 @@ class OrderOption(BaseModel):
     field_name: str
     desc: bool
 
+class FilterOption(BaseModel):
+    field_name: str
+    value: str
+
 class QueryCondition(BaseModel):
     page: int
     page_size: int
     order_by: OrderOption
     keyword: str
+    filters: List[FilterOption]
 
 class _TableName_Create(BaseModel):
     name: str
