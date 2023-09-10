@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Dict, List
 
-from sqlalchemy import Column, DateTime, Integer
+from sqlalchemy import Column, DateTime, Integer, String
 
 from src.schemas.template import QueryCondition
 from src.utils.db import Base, db
@@ -13,10 +13,11 @@ class DB_TableName_(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     # 在此添加表结构信息:
+    name = Column(String)
     # ...
 
-    last_update_time = Column(DateTime)
-    created_time = Column(DateTime)
+    last_update_time = Column(DateTime, default=datetime.now)
+    created_time = Column(DateTime, default=datetime.now)
 
     @classmethod
     def add(cls, data: "DB_TableName_"):

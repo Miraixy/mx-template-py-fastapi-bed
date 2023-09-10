@@ -38,7 +38,22 @@ poetry run app env=dev  # 开发环境 (default)
 poetry run app env=prod # 生产环境
 ```
 
-## 生成 CRUD 模板
+## 生成 CRUD 模板 (自动追加模型创建、路由引入)
+> ! 注意: 自动追加完成后如需撤销请手动删除追加的代码，请勿在 IED 中使用 Ctrl+Z 撤销操作，否则可能造成代码格式异常
+
+### 1. 执行以下命令
+
+```bash
+poetry run create_crud name={数据模型名} -a  # 多词使用 `_` 作为分隔 大小写不敏感
+
+```
+例如:
+
+```bash
+poetry run create_crud name=example
+```
+
+## 生成 CRUD 模板 (手动添加模型创建、路由引入)
 
 ### 1. 执行以下命令
 

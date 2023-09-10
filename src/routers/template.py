@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from src.conf import config  # noqa: F401
-from src.deps import get_current_active_user
 from src.log import logger
 from src.models.template import DB_TableName_
 from src.models.user import DBUser
@@ -10,12 +9,12 @@ from src.schemas.perm import Role
 from src.schemas.template import (
     _TableName_Create,
     _TableName_Delete,
-    _TableName_Get,
     _TableName_Query,
     _TableName_Update,
 )
+from src.utils.deps import get_current_active_user
 
-ROUTER_TAG = "_table_name_"
+ROUTER_TAG = "_Table_name_"
 
 router = APIRouter()
 
@@ -24,19 +23,27 @@ router = APIRouter()
 async def create(data: _TableName_Create):
     """创建 _TableName_ 资源"""
     try:
-        item = DB_TableName_(data)
+        item = DB_TableName_(**data.model_dump())
         DB_TableName_.add(item)
-        return Ret.success("创建成功")
+        return Ret.success(
+            "创建成功",
+            data={
+                "id": item.id,
+                "name": item.name,
+                "last_update_time": item.last_update_time,
+                "created_time": item.created_time,
+            },
+        )
     except:
         logger.error(f"创建 {data} 资源时发生错误")
         return Ret.fail("创建失败")
 
 
 @router.get("/get", tags=[ROUTER_TAG], summary="查询")
-async def get(data: _TableName_Get):
+async def get(_id):
     """根据 id 查询 _TableName_ 资源"""
 
-    item = DB_TableName_.get_by_id(data.id)
+    item = DB_TableName_.get_by_id(_id)
     if not item:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
@@ -50,7 +57,7 @@ async def get(data: _TableName_Get):
     )
 
 
-@router.get("/query", tags=[ROUTER_TAG], summary="查询")
+@router.post("/query", tags=[ROUTER_TAG], summary="筛选")
 async def query(data: _TableName_Query):
     """根据条件查询 _TableName_ 资源"""
 
@@ -69,14 +76,18 @@ async def query(data: _TableName_Query):
 
 @router.put("/update", tags=[ROUTER_TAG], summary="更新")
 async def update(data: _TableName_Update):
-    """根据 id 更新 _TableName_ 资源"""
+    """根据 id 更新 Example 资源"""
+    item = DB_TableName_.get_by_id(data.id)
+    if not item:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     try:
         update_data = data.model_dump()
         # ... 处理更新
-        DB_TableName_.update(**update_data)
-        return Ret.success("更新成功")
+
+        DB_TableName_.update(item, **update_data)
+        return Ret.success("更新成功", data={"id": item.id, "name": item.name})
     except:
-        logger.error(f"更新 {data} 资源时发生错误")
+        logger.exception(f"更新 {data} 资源时发生错误")
         return Ret.fail("更新失败")
 
 

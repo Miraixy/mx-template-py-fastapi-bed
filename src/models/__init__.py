@@ -1,11 +1,10 @@
 from src.log import logger
-from src.utils.db import Base, engine
 
 # TODO 引入所有需要自动创建的表模型
-# from .template import DB_TableName_  # noqa: F401
-from .user import DBUser  # noqa: F401
+from src.models.user import DBUser  # noqa: F401
 
-...
+# $table_create$ 自动创建表追加锚 请不要修改此行*
+from src.utils.db import Base, engine
 
 
 def database_init():

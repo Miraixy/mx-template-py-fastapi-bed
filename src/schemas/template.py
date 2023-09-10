@@ -19,13 +19,11 @@ class QueryCondition(BaseModel):
     keyword: str
 
 class _TableName_Create(BaseModel):
-    ...
+    name: str
 
 class _TableName_Update(BaseModel):
-    ...
-
-class _TableName_Get(BaseModel):
     id: int
+    name: str
 
 class _TableName_Query(BaseModel):
     condition: QueryCondition

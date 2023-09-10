@@ -3,7 +3,6 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from src.conf import config
-from src.deps import get_current_active_user
 from src.log import logger
 from src.models.user import DBUser
 from src.schemas.message import Ret, UserToken
@@ -15,6 +14,7 @@ from src.utils.auth import (
     get_perm_role,
     verify_password,
 )
+from src.utils.deps import get_current_active_user
 
 ROUTER_TAG = "User"
 
