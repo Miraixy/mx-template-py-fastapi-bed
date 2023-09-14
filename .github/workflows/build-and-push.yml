@@ -34,6 +34,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Copy SSH Private Key
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
       - name: Deploy to Server
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -42,3 +49,4 @@ jobs:
           ssh -i "$SSH_PRIVATE_KEY" root@$DEPLOY_SERVER "mkdir -p /tmp/mx-deply-tmp && rm -rf /tmp/mx-deply-tmp/*"
           scp -i "$SSH_PRIVATE_KEY" -r ./docker-compose.yml root@$DEPLOY_SERVER:/tmp/mx-deply-tmp/docker-compose.yml
           ssh -i "$SSH_PRIVATE_KEY" root@$DEPLOY_SERVER "cd /tmp/mx-deply-tmp && docker-compose up -d"
+          rm -rf ~/.ssh/id_rsa
