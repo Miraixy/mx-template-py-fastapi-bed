@@ -1,0 +1,28 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main  # 触发分支，可以根据需要更改
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest  # 使用最新版的Ubuntu操作系统
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2  # 检出代码
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1  # 设置Docker Buildx，用于多架构构建
+
+    - name: Build and Push Docker Image
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}  # Docker Hub用户名
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}  # Docker Hub密码或访问令牌
+      run: |
+        docker buildx create --use
+        docker buildx inspect default --bootstrap
+        docker buildx build --platform linux/amd64,linux/arm64 -t kromiose/mx-template-py-fastapi-bed:latest .
+        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        docker push kromiose/mx-template-py-fastapi-bed:latest

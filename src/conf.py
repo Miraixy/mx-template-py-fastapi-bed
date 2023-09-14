@@ -1,6 +1,6 @@
 import sys
 from enum import Enum
-from typing import Dict
+from typing import Dict, Type
 
 from configs.config import Config, DevConfig, ProdConfig
 
@@ -8,19 +8,22 @@ from configs.config import Config, DevConfig, ProdConfig
 class Env(Enum):
     Dev = "dev"
     Prod = "prod"
+    Default = "dev"
 
 
-mapping: Dict[Env, Config] = {Env.Dev: DevConfig, Env.Prod: ProdConfig}  # type: ignore
+mapping: Dict[str, Type[Config]] = {"dev": DevConfig, "prod": ProdConfig}
 # 获取运行参数中的环境参数 env=dev
-APP_ENV: str = ""
+APP_ENV: Env = Env.Default
 
-for env in sys.argv[:]:
-    if env.startswith("env="):
-        env = env.split("=")[-1]
-        APP_ENV = env
-        break
+# Parse the command-line arguments
+for arg in sys.argv[1:]:
+    if arg.startswith("env="):
+        env = arg.split("=")[-1]
+        if env in Env.__members__.values():
+            APP_ENV = Env(env)
+            break
 else:
-    # 默认为开发环境
-    APP_ENV = Env.Dev # type: ignore
+    APP_ENV = Env.Default
 
-config: Config = mapping[APP_ENV]()  # type: ignore
+# Use the updated APP_ENV value to retrieve the config
+config: Config = mapping[APP_ENV.value]()
