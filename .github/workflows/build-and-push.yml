@@ -39,6 +39,6 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           DEPLOY_SERVER: ${{ secrets.DEPLOY_SERVER }}
         run: |
-          ssh -i "$SSH_PRIVATE_KEY" root@$DEPLOY_SERVER "mkdir -p /root/mx-deply-tmp && rm -rf /root/mx-deply-tmp/*"
-          scp -i "$SSH_PRIVATE_KEY" -r ./docker-compose.yml root@$DEPLOY_SERVER:/root/mx-deply-tmp/docker-compose.yml
-          ssh -i "$SSH_PRIVATE_KEY" root@$DEPLOY_SERVER "cd /root/mx-deply-tmp && docker-compose up -d"
+          ssh -i "$SSH_PRIVATE_KEY" root@$DEPLOY_SERVER "mkdir -p /tmp/mx-deply-tmp && rm -rf /tmp/mx-deply-tmp/*"
+          scp -i "$SSH_PRIVATE_KEY" -r ./docker-compose.yml root@$DEPLOY_SERVER:/tmp/mx-deply-tmp/docker-compose.yml
+          ssh -i "$SSH_PRIVATE_KEY" root@$DEPLOY_SERVER "cd /tmp/mx-deply-tmp && docker-compose up -d"
