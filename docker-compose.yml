@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  app:
+    image: kromiose/mx-template-py-fastapi-bed:latest
+    ports:
+      - "8090:8090"  # 容器的端口:主机的端口
