@@ -31,6 +31,9 @@ jobs:
     needs: build-and-push
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2 # 检出代码
+
       - name: Configure SSH Key
         env:
           DEPLOY_SERVER: ${{ secrets.DEPLOY_SERVER }}
