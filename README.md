@@ -10,6 +10,7 @@
 - [x] JWT 鉴权
 - [x] RUFF 代码规范
 - [x] 一行命令生成包括 model, schema, router 的 CRUD 模板
+- [x] 完整的 CI/CD 流程和生产环境 Docker-compose 自动部署模板
 
 ## 启动开发
 
