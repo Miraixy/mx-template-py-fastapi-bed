@@ -6,7 +6,7 @@ from src.schemas.template import QueryCondition
 from src.utils.db import Base, db
 
 
-# 定义User模型
+# 定义 _TableName_ 模型
 class DB_TableName_(Base):
     __tablename__ = "_table_name_"
 
@@ -45,11 +45,11 @@ class DB_TableName_(Base):
 
         query = db.query(cls)
 
-        for _filter in condition.filters:
-            field_name = _filter.field_name
-            value = _filter.value
+        # for _filter in condition.filters:
+        #     field_name = _filter.field_name
+        #     value = _filter.value
 
-            # TODO 待实现: 检查参数类型，根据不同类型添加不同筛选条件
+        #     # TODO 待实现: 检查参数类型，根据不同类型添加不同筛选条件
 
         if keyword:
             query = db.query(cls).filter(cls.name.like(f"%{keyword}%"))

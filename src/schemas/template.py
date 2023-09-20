@@ -33,6 +33,3 @@ class _TableName_Update(BaseModel):
 
 class _TableName_Query(BaseModel):
     condition: QueryCondition
-
-class _TableName_Delete(BaseModel):
-    id: int

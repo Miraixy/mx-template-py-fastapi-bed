@@ -8,7 +8,6 @@ from src.schemas.message import Ret
 from src.schemas.perm import Role
 from src.schemas.template import (
     _TableName_Create,
-    _TableName_Delete,
     _TableName_Query,
     _TableName_Update,
 )
@@ -102,16 +101,16 @@ async def update(data: _TableName_Update):
 
 
 @router.delete("/delete", tags=[ROUTER_TAG], summary="删除数据")
-async def delete(data: _TableName_Delete, current_user: DBUser = Depends(get_current_active_user)):
+async def delete(_id: int, current_user: DBUser = Depends(get_current_active_user)):
     """根据 id 删除 _TableName_ 资源"""
     if current_user.perm_level < Role.Admin: # type: ignore
         return Ret.fail("权限不足")
     try:
-        item = DB_TableName_.get_by_id(data.id)
+        item = DB_TableName_.get_by_id(_id)
         DB_TableName_.delete(item)
         return Ret.success("删除成功")
     except Exception as e:
-        logger.error(f"删除 {data} 资源时发生错误: {e}")
+        logger.error(f"删除 id: {_id} 资源时发生错误: {e}")
         return Ret.fail("删除失败")
 
 
