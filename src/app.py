@@ -7,11 +7,11 @@ from src.conf import APP_ENV, config
 from src.log import get_logging_config, logger
 from src.models import database_init
 
-# 自定义路由导入
+# Custom routers import
 from src.routers.user import login
 from src.routers.user import router as user_router
 
-# $import_routers$ 路由导入锚 请不要修改此行*
+# $import_routers$ 路由导入锚 *请不要修改此行* (Anchor of the router import line *Do not modify this line*)
 from src.schemas.message import UserToken
 from src.schemas.user import UserLogin
 
@@ -37,7 +37,7 @@ app.add_middleware(
 """ TODO 挂载路由表 """
 app.include_router(user_router, prefix="/user", tags=["User"])
 
-# $include_routers$ 路由导入锚 请不要修改此行*
+# $include_routers$ 路由导入锚 *请不要修改此行* (Anchor of the router mount line *Do not modify this line*)
 
 
 @app.get("/ping")

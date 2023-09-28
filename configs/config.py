@@ -2,7 +2,7 @@ from typing import Literal
 
 
 class Config:
-    """配置类"""
+    """Configuration"""
 
     def __getitem__(self, key):
         return self.__getattribute__(key)
@@ -21,7 +21,7 @@ class Config:
 
 
 class DevConfig(Config):
-    """开发环境配置"""
+    """Development environment configuration"""
 
     LOG_LEVEL = "DEBUG"
     UVICORN_LOG_LEVEL = "DEBUG"
@@ -31,7 +31,7 @@ class DevConfig(Config):
 
 
 class ProdConfig(Config):
-    """生产环境配置"""
+    """Production environment configuration"""
 
     LOG_LEVEL = "WARNING"
     UVICORN_LOG_LEVEL = "WARNING"

@@ -1,82 +1,97 @@
 # Python FastAPI Template
 
-## 基本功能
+## 中文文档请查看 [README_zh.md](https://github.com/Miraixy/mx-template-py-fastapi-bed/blob/main/README_zh.md)
 
-- [x] 基本框架
-- [x] 可切换的环境配置
-- [x] 基于 SQLAlchemy 的 ORM
-- [x] Swagger 接口文档支持
-- [x] 基于 logure 框架的日志记录
-- [x] JWT 鉴权
-- [x] RUFF 代码规范
-- [x] 一行命令生成包括 model, schema, router 的 CRUD 模板
-- [x] 完整的 CI/CD 流程和生产环境 Docker-compose 自动部署模板
+## Basic Features
 
-## 启动开发
+- [x] Basic framework
+- [x] Switchable environment configurations
+- [x] Automatic code reloading
+- [x] SQLAlchemy-based ORM
+- [x] Swagger API documentation support
+- [x] Logging using the logure framework
+- [x] JWT authentication
+- [x] RUFF code standards
+- [x] One-line command to generate CRUD templates including model, schema, and router
+- [x] Complete CI/CD workflow and production environment Docker-compose automatic deployment template
+- [x] Using RUFF to standardize code
 
-### 1. 安装 Poetry
+## Getting Started
+
+### 1. Install Poetry
 
 ```bash
 pip install poetry
 ```
 
-### 2. 安装依赖
+### 2. Install Dependencies
 
 ```bash
 poetry install
 ```
 
-### 3. 启动开发
+### 3. Start Development
 
 ```bash
 poetry run app
 ```
 
-### 4. 切换环境
+### 4. Switch Environments
 
 ```bash
-poetry run app env=dev  # 开发环境 (default)
-poetry run app env=prod # 生产环境
+poetry run app env=dev  # Development environment (default)
+poetry run app env=prod # Production environment
 ```
 
-## 生成 CRUD 模板 (自动追加模型创建、路由引入)
-> ! 注意: 自动追加完成后如需撤销请手动删除追加的代码，请勿在 IED 中使用 Ctrl+Z 撤销操作，否则可能造成代码格式异常
+In `dev` environment, the development server will automatically reload the code
 
-### 1. 执行以下命令
+## Generate CRUD Templates (Automatically appends model creation and router inclusion) *RECOMMENDED*
+
+> ! Note: After automatic appending, if you need to undo it, please manually delete the appended code. Do not use Ctrl+Z in the IDE, as it may cause code formatting issues.
+
+### 1. Execute the following command
 
 ```bash
-poetry run create_crud name={数据模型名} -a  # 多词使用 `_` 作为分隔 大小写不敏感
-
+poetry run create_crud name={data_model_name} -a  # Use `_` as a separator for multi-word names, case-insensitive
 ```
-例如:
+
+For example:
+
+```bash
+poetry run create_crud name=example -a
+```
+
+## Generate CRUD Templates (Manually add model creation and router inclusion)
+
+### 1. Execute the following command
+
+```bash
+poetry run create_crud name={data_model_name} -a  # Use `_` as a separator for multi-word names, case-insensitive
+```
+
+For example:
 
 ```bash
 poetry run create_crud name=example
 ```
 
-## 生成 CRUD 模板 (手动添加模型创建、路由引入)
+### 2. Add automatic table creation
 
-### 1. 执行以下命令
-
-```bash
-poetry run create_crud name={数据模型名}  # 多词使用 `_` 作为分隔 大小写不敏感
-```
-
-### 2. 添加数据表自动创建
-
-在 `src/models/__init__.py` 的 `引入所有需要自动创建的表模型` 引入你的关联模型:
+In `src/models/__init__.py`, import your associated models under `# $table_create$`:
 
 ```python
-# TODO 引入所有需要自动创建的表模型
-from .{数据模型名} import DB{数据模型类名}  # 数据模型类名为数据模型名的大驼峰形式 例如: UserData
+# $table_create$ 自动创建表追加锚 *请不要修改此行* (Anchor of the table creation line *Do not modify this line*)
+from .{data_model_name} import DB{DataModelClassName}
 ```
 
-### 3. 挂载路由
+### 3. Mount the router
 
-在 `src/app.py` 中的 `挂载路由表` 添加路由:
+In `src/app.py`, under Mount the router tables, add the router:
 
 ```python
-from src.routers.{数据模型名} import router as {数据模型名}_router
+from src.routers.{data_model_name} import router as {data_model_name}_router
 
-app.include_router({数据模型名}, prefix="/{路由前缀}", tags=["{路由标签}"])
+app.include_router({data_model_name}_router, prefix="/{router_prefix}", tags=["{router_tag}"])
 ```
+
+Please replace `{data_model_name}`, `{DataModelClassName}`, `{router_prefix}`, and `{router_tag}` with the appropriate values as needed for your project.

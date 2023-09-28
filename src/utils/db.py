@@ -5,17 +5,17 @@ from sqlalchemy.orm import Session, sessionmaker
 from src.conf import config
 from src.log import logger
 
-# 创建对象的基类:
+# Create Database Connection:
 Base = declarative_base()
 
-# 初始化数据库连接:
+# Init Database engine:
 engine = create_engine(config.DATABASE_URL)
 Base.metadata.create_all(engine)
 
 connection = engine.connect()
 logger.info(f"Connected to database {config.DATABASE_URL}")
 
-# 创建DBSession类型:
+# Create Database Session:
 try:
     db: Session = sessionmaker(bind=engine)()
 except:

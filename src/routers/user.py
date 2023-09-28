@@ -24,10 +24,10 @@ router = APIRouter()
 @router.post("/register", tags=[ROUTER_TAG], summary="用户注册")
 async def register(data: UserCreate):
     if data.access_key != config.SUPER_ACCESS_KEY:
-        return Ret.fail("权限不足")
-    logger.info(f"用户 {data} 正在注册...")
+        return Ret.fail("Permission denied")
+    logger.info(f"User: {data} is registering...")
     if DBUser.get_by_username(data.username):
-        return Ret.fail("用户名已存在")
+        return Ret.fail("Username already exists")
     try:
         DBUser.add(
             DBUser(
@@ -37,24 +37,24 @@ async def register(data: UserCreate):
                 login_time=None,
             ),
         )
-        return Ret.success("注册成功")
+        return Ret.success("Register success")
     except:
-        return Ret.fail("注册失败")
+        return Ret.fail("Register failed")
 
 
 @router.post("/login", tags=[ROUTER_TAG], summary="用户登录")
 async def login(data: UserLogin):
     user = DBUser.get_by_username(data.username)
-    logger.info(f"用户 {user.username if user else '未知'} 正在登录...")
+    logger.info(f"User: {user.username if user else 'Unknown'} is logging in...")
     if user and verify_password(data.password, user.password):  # type: ignore
-        logger.info(f"用户 {user.username} 登录成功...")
+        logger.info(f"User {user.username} logging in successfully...")
         DBUser.update(user, login_time=datetime.now())
         return UserToken(
             access_token=create_access_token(user.username),
             refresh_token=create_refresh_token(user.username),
             token_type="bearer",
         )
-    logger.info(f"用户 {data.username} 登录失败... ")
+    logger.info(f"User {data.username} logging in failed...")
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Incorrect username or password",
@@ -65,19 +65,19 @@ async def login(data: UserLogin):
 @router.post("/edit", tags=[ROUTER_TAG], summary="用户更新")
 async def edit(data: UserUpdate):
     if data.access_key != config.SUPER_ACCESS_KEY:
-        return Ret.fail("权限不足")
+        return Ret.fail("Permission denied")
     if user := DBUser.get_by_username(data.username):
         model_dict = data.model_dump()
         del model_dict["access_key"]
         del model_dict["username"]
         DBUser.update(user, **model_dict)
-        return Ret.success("更新成功")
-    return Ret.fail("用户不存在")
+        return Ret.success("Update success")
+    return Ret.fail("User not found")
 
 
 @router.get("/me", tags=[ROUTER_TAG], summary="用户个人信息")
 async def info(current_user: DBUser = Depends(get_current_active_user)):
-    logger.info(f"用户 {current_user.username} 正在查询个人信息...")
+    logger.info(f"User: {current_user.username} querying personal information...")
     return Ret.success(
         "query success",
         data={
@@ -88,4 +88,4 @@ async def info(current_user: DBUser = Depends(get_current_active_user)):
         },
     )
 
-logger.success(f"注册 {ROUTER_TAG} 路由表完成")
+logger.success(f"Successfully initialized {ROUTER_TAG} router")
