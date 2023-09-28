@@ -64,19 +64,22 @@ async def query(data: _TableName_Query):
     try:
         # TODO DB_TableName_.query 方法默认提供了分页、排序、关键字过滤，如果需要其他条件需自行实现
         try:
-            items = DB_TableName_.query(data.condition)
+            items, total = DB_TableName_.query(data.condition)
         except Exception as e:
             logger.error(f"检索资源 {data} 时发生错误: {e}")
             return Ret.fail("检索资源出现错误，请检查参数字段是否正确")
 
         return Ret.success(
             "query success",
-            data=[{
-                "id": item.id,
-                "name": item.name,
-                "created_time": item.created_time,
-                "last_update_time": item.last_update_time,
-            } for item in items],
+            data={
+                "list":[{
+                    "id": item.id,
+                    "name": item.name,
+                    "created_time": item.created_time,
+                    "last_update_time": item.last_update_time,
+                } for item in items],
+                "total": total,
+            },
         )
     except Exception as e:
         logger.error(f"检索资源 {data} 资源时发生错误: {e}")

@@ -35,7 +35,7 @@ class DB_TableName_(Base):
 
     @classmethod
     def query(cls, condition: QueryCondition):
-        """根据条件查询 _TableName_ 资源"""
+        """根据条件查询 Order 资源"""
 
         page = condition.page if condition.page else 1
         page_size = condition.page_size if condition.page_size else 10
@@ -61,10 +61,13 @@ class DB_TableName_(Base):
                 else getattr(cls, order_field_name).desc(),
             )
 
-        if page and page_size:
-            query = query.offset((page - 1) * page_size).limit(page_size)
+        total = query.count()
 
-        return query
+        if page and page_size:
+            query = query.offset((page - 1) * page_size)
+        query = query.limit(page_size)
+
+        return query, total
 
     @classmethod
     def update(cls, data: "DB_TableName_", **kwargs):
