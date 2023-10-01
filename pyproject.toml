@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "mx-template-fastap-py-bed"
+name = "mx-template-fastapi-py-bed"
 version = "0.1.0"
 description = "一套基于 FastAPI 集成了 SqlAlchemy ORM、JWT 鉴权、环境配置、日志记录等基本功能的后端 API 开发模板"
 authors = ["KroMiose <li_xiangff@163.com>"]
