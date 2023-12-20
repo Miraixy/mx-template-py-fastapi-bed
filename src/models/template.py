@@ -35,7 +35,7 @@ class DB_TableName_(Base):
 
     @classmethod
     def query(cls, condition: QueryCondition):
-        """根据条件查询 Order 资源"""
+        """根据条件查询 _TableName_ 资源"""
 
         page = condition.page if condition.page else 1
         page_size = condition.page_size if condition.page_size else 10
